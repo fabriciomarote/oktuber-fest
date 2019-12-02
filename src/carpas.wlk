@@ -35,4 +35,3 @@ class Jarra {
    	  return capacidad * marca.graduacion()
    }
 }
-

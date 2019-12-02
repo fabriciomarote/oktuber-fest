@@ -90,5 +90,4 @@ test "Ebrios empedernidos" {
 test "Es patriota" {
     assert.that(persona2.esPatriota())	
 }
-
 }
