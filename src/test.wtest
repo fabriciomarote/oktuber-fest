@@ -1,0 +1,94 @@
+import carpas.*
+import personas.*
+import marcas.*
+
+describe "tests" {
+	//marcas
+    const hofbrau = new Roja(cantDeLupuloPorLitro = 5, paisDeOrigen = "Alemania")
+    const corona = new Rubia(graduacion = 3,cantDeLupuloPorLitro = 7, paisDeOrigen = "Mexico")
+	const guiness = new Negra(cantDeLupuloPorLitro = 3, paisDeOrigen = "Irlanda") 
+	//jarras
+	const jarra1 = new Jarra(capacidad = 0.5 , marca = hofbrau )
+	const jarra2 = new Jarra(capacidad = 1 , marca = hofbrau )
+	const jarra3 = new Jarra(capacidad = 1 , marca = corona )
+	const jarra4 = new Jarra(capacidad = 1.5 , marca = guiness )
+	//personas
+	const persona1 = new Belga( peso = 70, nivelDeAguante = 5, jarrasCompradas = [jarra1, jarra2,jarra3], 
+		             escuchaMusicaTradicional = true, pais = "Belgica")
+    const persona2 = new Aleman( peso = 55, nivelDeAguante = 2, jarrasCompradas = [jarra1, jarra1,jarra1],
+    	             escuchaMusicaTradicional = false, pais = "Alemania")
+    const persona3 = new Checo( peso = 90, nivelDeAguante = 7, jarrasCompradas = [jarra4, jarra2,jarra1],
+    	             escuchaMusicaTradicional = true, pais = "Checoslovaquia")
+    const persona4 = new Checo( peso = 90, nivelDeAguante = 7, jarrasCompradas = [jarra2, jarra3,jarra4],
+    	             escuchaMusicaTradicional = false, pais = "Irlanda")
+
+    //carpas
+    const carpa1 = new Carpa(limiteDeGenteAdmitida = 15, tieneBandaQueTocaMusicaTradicional = true,
+    	                     cerveza = hofbrau, personasQueEstan = [persona2,persona3])
+	const carpa2 = new Carpa(limiteDeGenteAdmitida = 50, tieneBandaQueTocaMusicaTradicional = false,
+		                     cerveza = corona, personasQueEstan = [persona1,persona2,persona3])
+	const carpa3 = new Carpa(limiteDeGenteAdmitida = 20, tieneBandaQueTocaMusicaTradicional = true, 
+		                     cerveza = guiness, personasQueEstan = [persona3,persona4])
+
+//Tests	
+
+//1
+test "Contenido de alcohol" {
+	assert.equals(1.25, jarra1.contenidoDeAlcohol())
+    assert.equals(3, jarra3.contenidoDeAlcohol())
+	assert.equals(2.5, jarra2.contenidoDeAlcohol())
+}	
+	
+//2		
+test "Total de alcohol" {
+	assert.equals(2.5, persona1.totalDeAlcoholIngerido())
+	assert.equals(1.5, persona2.totalDeAlcoholIngerido())
+	assert.equals(3, persona3.totalDeAlcoholIngerido())
+}
+
+//3
+test "Esta Ebria" {
+	assert.that(persona3.estaEbria())
+}
+	
+//4	
+test "Quiere entrar a carpa" {
+	assert.that(persona1.quiereEntrarA(carpa1))
+}	
+
+test "No quiere entrar a carpa" {
+	assert.notThat(persona2.quiereEntrarA(carpa2))
+}	
+
+//5
+test "Carpa deja entrar a persona" {
+	assert.that(carpa1.dejaIngresarA(persona2))
+}
+
+//6
+test "Persona puede entrar a carpa" {
+	assert.that(persona1.puedeEntrarA(carpa1))
+}	
+
+//7
+test "Persona entra a carpa" {
+    persona1.ingresarA(carpa1)
+    assert.equals(3, carpa1.capacidad())
+}
+
+test "Persona no puede entrar a carpa" {
+	assert.throwsException({persona1.ingresarA(carpa3)})
+}
+
+//8
+
+test "Ebrios empedernidos" {
+	assert.equals(1, carpa3.cantDeEbriosEmpedernidos())
+}
+
+//9
+test "Es patriota" {
+    assert.that(persona2.esPatriota())	
+}
+
+}
